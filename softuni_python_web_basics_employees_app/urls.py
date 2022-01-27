@@ -1,11 +1,11 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-from softuni_python_web_basics_employees_app.employees.views import home, department_details, list_departments
+from softuni_python_web_basics_employees_app.employees.views import home, go_to_home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
-    path('departments/1', department_details),
-    path('departments/', list_departments)
+    path('home/', home, name='index'),
+    path('go-to-home/', go_to_home, name='go to home'),
+    path('departments/', include('softuni_python_web_basics_employees_app.employees.urls'))
 ]
