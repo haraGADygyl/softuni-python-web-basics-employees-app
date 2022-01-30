@@ -17,6 +17,8 @@ from django.shortcuts import redirect, render
 #     return HttpResponse(f'{request.method}: This is home view')
 from django.urls import reverse_lazy
 
+from softuni_python_web_basics_employees_app.employees.models import Department, Employee
+
 
 def home(request):
     print(reverse_lazy('index'))
@@ -39,7 +41,23 @@ def department_details(request, id):
 
 
 def list_departments(request):
-    return HttpResponse('This is list view')
+    department = Department(
+        name=f'Department {random.randint(1, 1024)}',
+    )
+    department.save()
+
+    Department.objects.create(
+        name=f'Department {random.randint(1, 1024)}',
+    )
+
+    context = {
+        # 'departments': Department.objects.filter(name__contains='app'),
+        'departments': Department.objects
+            .prefetch_related('employee_set')
+            .all(),
+        'employees': Employee.objects.all(),
+    }
+    return render(request, 'list_departments.html', context)
 
 
 def not_found(request):

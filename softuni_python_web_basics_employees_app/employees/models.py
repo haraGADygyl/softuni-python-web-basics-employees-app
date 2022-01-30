@@ -1,11 +1,32 @@
 from django.db import models
+from django.urls import reverse
 
 
-class Department(models.Model):
+class AuditEntity(models.Model):
+    created_on = models.DateTimeField(
+        auto_now_add=True
+    )
+    updated_on = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Department(AuditEntity):
     name = models.CharField(
         max_length=20,
         null=True
     )
+
+    def get_absolute_url(self):
+        return reverse('department details', kwargs={
+            'id': self.id
+        })
+
+    def __str__(self):
+        return self.name
 
 
 class Employee(models.Model):
@@ -24,6 +45,7 @@ class Employee(models.Model):
         max_length=40,
         null=True,
         blank=True,
+        default='NO NAME'
     )
     egn = models.CharField(
         max_length=10,
@@ -50,6 +72,9 @@ class Employee(models.Model):
         Department,
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        ordering = ('first_name',)
 
 
 class User(models.Model):
