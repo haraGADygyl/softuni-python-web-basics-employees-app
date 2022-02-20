@@ -5,7 +5,7 @@ from softuni_python_web_basics_employees_app.employees.views import home, go_to_
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', home, name='index'),
+    path('', home, name='index'),
     path('go-to-home/', go_to_home, name='go to home'),
-    path('departments/', include('softuni_python_web_basics_employees_app.employees.urls'))
+    path('employees/', include('softuni_python_web_basics_employees_app.employees.urls')),
 ]

@@ -1,5 +1,6 @@
 import random
 
+from django import forms
 from django.http import HttpResponse, Http404
 # Create your views here.
 from django.shortcuts import redirect, render
@@ -20,19 +21,30 @@ from django.urls import reverse_lazy
 from softuni_python_web_basics_employees_app.employees.models import Department, Employee
 
 
-def home(request):
-    print(reverse_lazy('index'))
-    print(reverse_lazy('go to home'))
-    print(reverse_lazy('list_departments'))
-    print(reverse_lazy('department_details', kwargs={
-        'id': 1
-    }))
+class EmployeeForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=30
+    )
 
+    last_name = forms.CharField(
+        max_length=40
+    )
+
+    age = forms.IntegerField()
+
+
+def create_employee(request):
+    employee_form = EmployeeForm(request.POST)
+    if employee_form.is_valid():
+        print('Valid')
+    print('Invalid')
+
+
+def home(request):
     context = {
-        'number': random.randint(0, 1024),
-        'numbers': [random.randint(0, 1024) for i in range(8)]
+        'employee_form': EmployeeForm(),
     }
-    return render(request, 'index.html', context, content_type='text/html')
+    return render(request, 'index.html', context)
 
 
 def department_details(request, id):
